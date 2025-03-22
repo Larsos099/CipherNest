@@ -1,6 +1,6 @@
 #ifndef ENCRYPTIONSERVICE_H
 #define ENCRYPTIONSERVICE_H
-
+#include <vector>
 #include <string>
 
 namespace cipher_nest{
