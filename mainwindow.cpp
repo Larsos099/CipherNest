@@ -1,9 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "encryptionservice.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    cipher_nest::EncryptionService("", "");
+
     ui->setupUi(this);
     // Listen mit Passwörtern und so
     servicelist = ui->Services;
