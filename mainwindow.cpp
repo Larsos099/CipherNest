@@ -1,13 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "encryptionservice.h"
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    cipher_nest::EncryptionService("", "");
-
     ui->setupUi(this);
     // Listen mit Passwörtern und so
     servicelist = ui->Services;
@@ -57,7 +53,41 @@ void MainWindow::on_actionCipherNest_schlie_en_triggered()
 
 void MainWindow::on_change_entry_clicked()
 {
-    // WIP
-}
+    bool found = false;
+    QMessageBox::StandardButton reply = {};
+    QList<QListWidgetItem*> foundItems;
+    QListWidgetItem* itemtochange;
+    QInputDialog qInDiag;
+    QMessageBox qMsgBox;
+    QString entryToChange, newPassword = {};
+    entryToChange = qInDiag.getText(this, "Entry Select", "Which Entry's Password should be changed?");
+    foundItems = servicelist->findItems(entryToChange, Qt::MatchContains);
+    for(int i = 0; i < foundItems.size(); i++){
+        QString mod = entryToChange.toLower();
+        QString modFound = foundItems[i]->text().toLower();
+        if(mod == modFound){
+            found = true;
+            itemtochange = foundItems[i];
+            break;
+        }
+    }
 
+    if(found){
+        int row = servicelist->row(itemtochange);
+        newPassword = qInDiag.getText(this, "Set New Password for " + itemtochange->text(), "New Password: ");
+        passwordlist->item(row)->setText(newPassword);
+    }
+    else{
+
+        reply = qMsgBox.critical(this, "Entry not found.", "The entry named " + entryToChange +" wasnt found. Try again?",
+                                 QMessageBox::Yes|QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            on_change_entry_clicked();
+        }
+        else{
+            return;
+        }
+    }
+
+}
 
