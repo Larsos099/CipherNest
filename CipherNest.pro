@@ -36,13 +36,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OPENSSL_PATH/lib/release/ -lcrypto.3
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OPENSSL_PATH/lib/debug/ -lcrypto.3
+win32:CONFIG(release, debug|release): LIBS += -L$$OPENSSL_PATH/lib/ -lcrypto
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OPENSSL_PATH/lib/ -lcrypto
 else:unix: LIBS += -L$$OPENSSL_PATH/lib/ -lcrypto.3
 
 INCLUDEPATH += $$OPENSSL_PATH/include
 DEPENDPATH += $$OPENSSL_PATH/include
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OPENSSL_PATH/lib/release/ -lssl
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OPENSSL_PATH/lib/debug/ -lssl
+win32:CONFIG(release, debug|release): LIBS += -L$$OPENSSL_PATH/lib/ -lssl
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OPENSSL_PATH/lib/ -lssl
 else:unix: LIBS += -L$$OPENSSL_PATH/lib/ -lssl
