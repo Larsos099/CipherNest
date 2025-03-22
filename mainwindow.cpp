@@ -16,12 +16,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void addToList(QString service, QString password, QListWidget* servicelist, QListWidget* passwordlist){
-    qDebug() << service;
-    qDebug() << password;
     servicelist->addItem(service);
-    passwordlist->addItem(password);
-    qDebug() << servicelist->item(0);
-    qDebug() << passwordlist->item(0);
+    passwordlist->addItem(password);;
     return;
 }
 void MainWindow::on_new_entry_clicked()
@@ -37,6 +33,7 @@ void MainWindow::on_new_entry_clicked()
                                 QMessageBox::Yes|QMessageBox::No);
     }
     else{
+        reply = {};
         addToList(service, password, servicelist, passwordlist);
     }
     if(reply == QMessageBox::Yes){
@@ -46,4 +43,17 @@ void MainWindow::on_new_entry_clicked()
         on_new_entry_clicked();
     }
 }
+
+
+void MainWindow::on_actionCipherNest_schlie_en_triggered()
+{
+    QApplication::quit();
+}
+
+
+void MainWindow::on_change_entry_clicked()
+{
+    // WIP
+}
+
 

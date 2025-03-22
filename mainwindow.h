@@ -23,6 +23,10 @@ private slots:
 
     void on_new_entry_clicked();
 
+    void on_actionCipherNest_schlie_en_triggered();
+
+    void on_change_entry_clicked();
+
 private:
     QListWidget* servicelist;
     QListWidget* passwordlist;
