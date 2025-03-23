@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Listen mit Passwörtern und so
     servicelist = ui->Services;
     passwordlist = ui->Passwords;
-    entrysearch = ui->remove_entry;
-
+    removeentry = ui->remove_entry;
+    searchentry = ui->search_entry;
 }
 
 MainWindow::~MainWindow()
@@ -168,16 +168,28 @@ void MainWindow::on_remove_entry_clicked()
 
     if(found){
         int row = servicelist->row(entryToRemove);
-        servicelist->removeItemWidget(entryToRemove);
-        QListWidgetItem* passwordEntry = passwordlist->item(row);
-        passwordlist->removeItemWidget(passwordEntry);
+        delete servicelist->takeItem(row);
+        delete passwordlist->takeItem(row);
         passwordlist->update(); servicelist->update();
     }
     else{
-        auto reply = qMsgBox.critical(this, "Entry not found.", "Entry " + entry + "not found, try again?",
+        auto reply = qMsgBox.information(this, "Entry not found.", "Entry " + entry + "not found, try again?",
                                       QMessageBox::Yes | QMessageBox::No);
         if(reply == QMessageBox::Yes) MainWindow::on_remove_entry_clicked();
         else return;
+    }
+}
+
+
+void MainWindow::on_search_btn_clicked()
+{
+    bool found = false;
+    QString toSearchFor = searchentry->text();
+    QList<QListWidgetItem*> foundEntries;
+    QListWidgetItem* SearchedEntry;
+    foundEntries = servicelist->findItems(toSearchFor, Qt::MatchContains);
+    for(int i = 0; i < foundEntries.size(); i++){
+        // TO DO
     }
 }
 

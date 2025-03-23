@@ -37,10 +37,13 @@ private slots:
 
     void on_remove_entry_clicked();
 
+    void on_search_btn_clicked();
+
 private:
-    QPushButton* entrysearch;
+    QPushButton* removeentry;
     QListWidget* servicelist;
     QListWidget* passwordlist;
+    QLineEdit* searchentry;
     Ui::MainWindow *ui;
     FileAgent fileAgent{};
 };
