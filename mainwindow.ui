@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>CiperNest</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="Services">
@@ -43,6 +43,11 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>New Entry</string>
     </property>
@@ -56,21 +61,33 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>.AppleSystemUIFont</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Change Entry</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="enc_test">
+   <widget class="QPushButton" name="remove_entry">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>50</y>
+      <x>700</x>
+      <y>10</y>
       <width>91</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>.AppleSystemUIFont</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>encryption test</string>
+     <string>Remove Entry</string>
     </property>
    </widget>
   </widget>
@@ -80,7 +97,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -102,25 +119,40 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSpeichern">
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionSchliessen">
    <property name="text">
     <string>Close</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+Q</string>
+   </property>
   </action>
   <action name="actionMaster_Passwort_ndern">
    <property name="text">
     <string>Change Master-Password</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
   </action>
   <action name="actionCipherNest_schlie_en">
    <property name="text">
     <string>Quit CipherNet</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
  </widget>

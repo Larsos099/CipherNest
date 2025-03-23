@@ -5,6 +5,10 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QString>
+#include "fileagent.h"
+#include "Util.h"
+#include <QDir>
+#define homedir QDir::homePath()
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -27,11 +31,17 @@ private slots:
 
     void on_change_entry_clicked();
 
-    void on_enc_test_clicked();
+    void on_action_ffnen_triggered();
+
+    void on_actionSpeichern_triggered();
+
+    void on_remove_entry_clicked();
 
 private:
+    QPushButton* entrysearch;
     QListWidget* servicelist;
     QListWidget* passwordlist;
     Ui::MainWindow *ui;
+    FileAgent fileAgent{};
 };
 #endif // MAINWINDOW_H

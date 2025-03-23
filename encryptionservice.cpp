@@ -4,6 +4,7 @@
 #include <openssl/evp.h>
 #include <openssl/err.h>
 #include <openssl/rand.h>
+#include <openssl/sha.h>
 #include <QDebug>
 
 namespace cipher_nest{
@@ -12,31 +13,7 @@ namespace cipher_nest{
     static constexpr auto BLOCK_SIZE = 16;
     static constexpr auto KEY_SIZE = 32;
 
-    EncryptionService::EncryptionService(const std::string &masterKeyPath, const std::string &userPassword, QString& out) {
-        // TDOD load master key from file and decrypt with password
-        // TODO load actual passwords and decryp with master key
-
-
-        // TODO remove test code below
-        auto key = generateRandomData(KEY_SIZE);
-
-        std::string testString = userPassword;
-        std::vector<unsigned char> testStringAsVector(testString.begin(), testString.end());
-
-        qDebug() << "Before encryption: " << testString;
-
-        std::vector<unsigned char> encryptedVector{};
-        encrypt(key, testStringAsVector, encryptedVector);
-        std::string encryptedString(encryptedVector.begin(), encryptedVector.end());
-        qDebug() << "After encryption: " << encryptedString;
-        out = QString::fromStdString(encryptedString);
-
-
-        std::vector<unsigned char> decryptedVector{};
-        decrypt(key, encryptedVector, decryptedVector);
-        std::string decryptedString(decryptedVector.begin(), decryptedVector.end());
-        qDebug() << "After decryption: " << decryptedString;
-
+    EncryptionService::EncryptionService() {
     }
 
     std::vector<unsigned char> EncryptionService::generateRandomData(int size){
@@ -46,6 +23,54 @@ namespace cipher_nest{
             qCritical() << "Could not generate random data for encryption";
         }
         return data;
+    }
+
+    std::vector<unsigned char> EncryptionService::getKeyFromPassword(QString password){
+
+        std::string input = password.toStdString();
+
+        EVP_MD_CTX *ctx = EVP_MD_CTX_new();
+        if (ctx == NULL) {
+            qCritical() << ("EVP_MD_CTX_new");
+            return {};
+        }
+
+
+        if (EVP_DigestInit_ex(ctx, EVP_sha512(), NULL) != 1) {
+            qCritical() << ("EVP_DigestInit_ex");
+            EVP_MD_CTX_free(ctx);
+            return {};
+        }
+
+        // Update the context with the input data
+        if (EVP_DigestUpdate(ctx, input.c_str(), input.size()) != 1) {
+            qCritical() <<("EVP_DigestUpdate");
+            EVP_MD_CTX_free(ctx);
+            return {};
+        }
+
+        // Finalize the hash and store it in 'hash'
+        std::vector<unsigned char> result{};
+        result.resize(EVP_MAX_MD_SIZE);
+        unsigned int hashLen = 0;
+        if (EVP_DigestFinal_ex(ctx, result.data(), &hashLen) != 1) {
+            qCritical() <<("EVP_DigestFinal_ex");
+            EVP_MD_CTX_free(ctx);
+            return {};
+        }
+
+
+        // Print the resulting SHA-512 hash in hexadecimal format
+        qDebug() << "SHA-512 Hash: ";
+        for (unsigned int i = 0; i < hashLen; i++) {
+            qDebug() << "%02x" << result[i];
+        }
+        qDebug() << "\n";
+
+        // Free the context
+        EVP_MD_CTX_free(ctx);
+        result.resize(KEY_SIZE);
+        return result;
     }
 
 
