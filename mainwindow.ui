@@ -44,7 +44,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Neuer Eintrag</string>
+     <string>New Entry</string>
     </property>
    </widget>
    <widget class="QPushButton" name="change_entry">
@@ -57,7 +57,20 @@
      </rect>
     </property>
     <property name="text">
-     <string>Eintrag ändern</string>
+     <string>Change Entry</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="enc_test">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>50</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>encryption test</string>
     </property>
    </widget>
   </widget>
@@ -87,27 +100,27 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_ffnen">
    <property name="text">
-    <string>Öffnen</string>
+    <string>Open</string>
    </property>
   </action>
   <action name="actionSpeichern">
    <property name="text">
-    <string>Speichern</string>
+    <string>Save</string>
    </property>
   </action>
   <action name="actionSchliessen">
    <property name="text">
-    <string>Schließen</string>
+    <string>Close</string>
    </property>
   </action>
   <action name="actionMaster_Passwort_ndern">
    <property name="text">
-    <string>Master-Passwort aendern</string>
+    <string>Change Master-Password</string>
    </property>
   </action>
   <action name="actionCipherNest_schlie_en">
    <property name="text">
-    <string>CipherNest schließen</string>
+    <string>Quit CipherNet</string>
    </property>
   </action>
  </widget>

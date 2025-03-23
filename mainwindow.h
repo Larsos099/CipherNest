@@ -27,6 +27,8 @@ private slots:
 
     void on_change_entry_clicked();
 
+    void on_enc_test_clicked();
+
 private:
     QListWidget* servicelist;
     QListWidget* passwordlist;

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "encryptionservice.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -89,5 +90,22 @@ void MainWindow::on_change_entry_clicked()
         }
     }
 
+}
+
+
+void MainWindow::on_enc_test_clicked()
+{
+    QMessageBox::StandardButton reply = {};
+    QString input = {};
+    QString enc = {};
+    std::string inputAsSTDString = {};
+    QInputDialog qInDiag;
+    QMessageBox qMsgBox;
+    input = qInDiag.getText(this, "Test Encryption", "Text to Encrypt: ");
+    inputAsSTDString = input.toStdString();
+    cipher_nest::EncryptionService("", inputAsSTDString, enc);
+    reply = qMsgBox.information(this, "Encryption/Decryption Completed", "Text Before: " + input + "\n After: " + enc);
+    qDebug() << "\n\n [!] ENCRYPTION TEST\n";
+    qDebug() << "QString passed out of function: " + enc;
 }
 

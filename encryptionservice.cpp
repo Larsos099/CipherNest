@@ -12,7 +12,7 @@ namespace cipher_nest{
     static constexpr auto BLOCK_SIZE = 16;
     static constexpr auto KEY_SIZE = 32;
 
-    EncryptionService::EncryptionService(const std::string &masterKeyPath, const std::string &userPassword) {
+    EncryptionService::EncryptionService(const std::string &masterKeyPath, const std::string &userPassword, QString& out) {
         // TDOD load master key from file and decrypt with password
         // TODO load actual passwords and decryp with master key
 
@@ -20,15 +20,16 @@ namespace cipher_nest{
         // TODO remove test code below
         auto key = generateRandomData(KEY_SIZE);
 
-        std::string testString = "I will be necypted and decrypted";
+        std::string testString = userPassword;
         std::vector<unsigned char> testStringAsVector(testString.begin(), testString.end());
 
-        qDebug() << "Before encryptio: " << testString;
+        qDebug() << "Before encryption: " << testString;
 
         std::vector<unsigned char> encryptedVector{};
         encrypt(key, testStringAsVector, encryptedVector);
         std::string encryptedString(encryptedVector.begin(), encryptedVector.end());
-        qDebug() << "After encryptio: " << encryptedString;
+        qDebug() << "After encryption: " << encryptedString;
+        out = QString::fromStdString(encryptedString);
 
 
         std::vector<unsigned char> decryptedVector{};
@@ -49,7 +50,7 @@ namespace cipher_nest{
 
 
     bool EncryptionService::encrypt(const std::vector<unsigned char> &key, const std::vector<unsigned char> &value, std::vector<unsigned char> &result){
-        qDebug() << "Startign encryption";
+        qDebug() << "Starting encryption";
         // 2 * block size for. 1 we add the ivec later in the front, 2 for block fillup in encryption
         result.resize(value.size() + 2 * BLOCK_SIZE);
 
