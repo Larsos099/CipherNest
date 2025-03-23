@@ -2,7 +2,7 @@
 #define ENCRYPTIONSERVICE_H
 #include <vector>
 #include <string>
-
+#include <QString>
 namespace cipher_nest{
     class EncryptionService
     {
@@ -10,11 +10,15 @@ namespace cipher_nest{
 
         std::vector<unsigned char> generateRandomData(int size);
 
+    public:
+
+        std::vector<unsigned char> getKeyFromPassword(QString password);
+
         bool decrypt(const std::vector<unsigned char> &key, const std::vector<unsigned char> &value, std::vector<unsigned char> &result);
 
         bool encrypt(const std::vector<unsigned char> &key, const std::vector<unsigned char> &value, std::vector<unsigned char> &result);
-    public:
-        EncryptionService(const std::string &masterKeyPath, const std::string &userPassword);
+
+        EncryptionService();
     };
 }
 #endif // ENCRYPTIONSERVICE_H

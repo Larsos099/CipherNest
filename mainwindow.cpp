@@ -1,5 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "encryptionservice.h"
+#include <QFileDialog>
+
+
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -8,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Listen mit Passwörtern und so
     servicelist = ui->Services;
     passwordlist = ui->Passwords;
+    entrysearch = ui->remove_entry;
 
 }
 
@@ -15,11 +22,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void addToList(QString service, QString password, QListWidget* servicelist, QListWidget* passwordlist){
-    servicelist->addItem(service);
-    passwordlist->addItem(password);;
-    return;
-}
+
 void MainWindow::on_new_entry_clicked()
 {
     QMessageBox::StandardButton reply;
@@ -34,10 +37,10 @@ void MainWindow::on_new_entry_clicked()
     }
     else{
         reply = {};
-        addToList(service, password, servicelist, passwordlist);
+        Util::addToList(service, password, servicelist, passwordlist, &fileAgent);
     }
     if(reply == QMessageBox::Yes){
-        addToList(service, password, servicelist, passwordlist);
+        Util::addToList(service, password, servicelist, passwordlist, &fileAgent);
     }
     else if(reply == QMessageBox::No){
         on_new_entry_clicked();
@@ -89,5 +92,92 @@ void MainWindow::on_change_entry_clicked()
         }
     }
 
+}
+
+
+
+
+void MainWindow::on_action_ffnen_triggered()
+
+{   QFileDialog explorer;
+    QMessageBox::StandardButton reply = {};
+    QMessageBox qMsgBox;
+    QString fln = explorer.getOpenFileName(this, "Wähle eine Speicherdatei aus", homedir);
+    QInputDialog qInDiag;
+    QString masterPassword = {};
+    masterPassword = qInDiag.getText(this, "Enter Master-Password", "Master-Password: ");
+    if(fileAgent.openJson(fln, masterPassword)){
+        fileAgent.readJson(servicelist, passwordlist);
+    }
+    else{
+        reply = qMsgBox.critical(this, "Opening File failed", "Opening file failed.. Try Again?", QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            on_action_ffnen_triggered();
+        }
+        else{
+            return;
+        }
+    }
+
+}
+
+
+void MainWindow::on_actionSpeichern_triggered()
+{
+    QMessageBox::StandardButton reply = {};
+    QMessageBox qMsgBox;
+    QFileDialog explorer;
+    QInputDialog qInDiag;
+    QString masterPassword = {};
+    QString fln = explorer.getSaveFileName(this, "Wähle einen Speicherort aus", homedir);
+    qDebug() << homedir;
+    masterPassword = qInDiag.getText(this, "Enter Master-Password", "Master-Password: ");
+    if(fileAgent.writeJson(fln, masterPassword)){
+        reply = qMsgBox.information(this, "File Saved successfully!", "File saved successfully");
+    }
+    else {
+        reply = qMsgBox.critical(this, "File Saving failed", "File Saving failed... Try Again?", QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            on_actionSpeichern_triggered();
+        }
+        else{
+            return;
+        }
+    }
+}
+
+
+void MainWindow::on_remove_entry_clicked()
+{
+    bool found = false;
+    QMessageBox qMsgBox;
+    QInputDialog qInDiag;
+    QString entry = qInDiag.getText(this, "Which Entry should be removed?", "Entry Service Name: ");
+    QList<QListWidgetItem*> foundEntrys;
+    QListWidgetItem* entryToRemove;
+    foundEntrys = servicelist->findItems(entry, Qt::MatchContains);
+    for(int i = 0; i < foundEntrys.size(); i++){
+        QString mod = entry.toLower();
+        QString modFound = foundEntrys[i]->text().toLower();
+        if( mod == modFound){
+           entryToRemove = foundEntrys[i];
+            found = true;
+
+        }
+    }
+
+    if(found){
+        int row = servicelist->row(entryToRemove);
+        servicelist->removeItemWidget(entryToRemove);
+        QListWidgetItem* passwordEntry = passwordlist->item(row);
+        passwordlist->removeItemWidget(passwordEntry);
+        passwordlist->update(); servicelist->update();
+    }
+    else{
+        auto reply = qMsgBox.critical(this, "Entry not found.", "Entry " + entry + "not found, try again?",
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes) MainWindow::on_remove_entry_clicked();
+        else return;
+    }
 }
 
