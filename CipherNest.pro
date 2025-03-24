@@ -12,6 +12,7 @@ macx{
 win32 {
     DEFINES += WINDOWS_PLATFORM
     OPENSSL_PATH = D:\\Qt\\Tools\\OpenSSLv3\\Win_x64
+    NLOHMANNJSON_PATH = C:/Users/Lars/vcpkg/installed/x86-windows/include
 }
 
 # You can make your code fail to compile if it uses deprecated APIs.
