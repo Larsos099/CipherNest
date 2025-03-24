@@ -61,11 +61,12 @@ namespace cipher_nest{
 
 
         // Print the resulting SHA-512 hash in hexadecimal format
-        qDebug() << "SHA-512 Hash: ";
+        /*qDebug() << "SHA-512 Hash: ";
         for (unsigned int i = 0; i < hashLen; i++) {
             qDebug() << "%02x" << result[i];
         }
         qDebug() << "\n";
+        */
 
         // Free the context
         EVP_MD_CTX_free(ctx);
@@ -127,7 +128,7 @@ namespace cipher_nest{
 
 
         EVP_CIPHER_CTX *encryptionContext = EVP_CIPHER_CTX_new();
-        if(!encryptionContext){
+        if (!encryptionContext){
             qCritical() << "Could not create encryption context";
             return false;
         }
@@ -148,6 +149,8 @@ namespace cipher_nest{
         int decryptionOutLengthPart2 = 0;
         if (!EVP_DecryptFinal_ex(encryptionContext, result.data()  + decryptionOutLengthPart1, &decryptionOutLengthPart2)) {
             qCritical() << "Could not finalize encryption";
+
+
             EVP_CIPHER_CTX_free(encryptionContext);
             return false;
         }

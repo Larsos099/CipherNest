@@ -44,6 +44,7 @@ bool FileAgent::openJson(QString path, QString masterPassword){
         QByteArray contents = filePath.readAll();
         qDebug() << contents;
         std::string convertedString = contents.toStdString();
+        qDebug() << "File Size read: " << convertedString.size();
         std::vector <unsigned char> encryptedValue{convertedString.begin(), convertedString.end()};
         auto key = encryptionService.getKeyFromPassword(masterPassword);
         qDebug() << "Will open file with converted mp: " << key;
@@ -82,11 +83,26 @@ bool FileAgent::writeJson(QString filePath, QString masterPassword){
     std::vector <unsigned char> encrypted{};
     encryptionService.encrypt(key, valueToEncrypt, encrypted);
     std::string encryptedString{encrypted.begin(), encrypted.end()};
-
+    qDebug() << "File Size written: " << encryptedString.size();
 
     if(file.open(QIODevice::WriteOnly)){
-        file.write(encryptedString.c_str());
-        file.flush(); file.close();
+
+        const char* data = encryptedString.c_str();
+        qint64 totalBytes = static_cast<qint64>(encryptedString.size());
+        qint64 bytesWritten = 0;
+
+        while (bytesWritten < totalBytes) {
+            qint64 result = file.write(data + bytesWritten, totalBytes - bytesWritten);
+            if (result == -1) {
+                qDebug() << "Error writing to file:" << file.errorString();
+                file.close();
+                return false;
+            }
+            bytesWritten += result;
+        }
+
+        file.flush();
+        file.close();
         return true;
     }
     return false;
