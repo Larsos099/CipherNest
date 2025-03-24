@@ -189,7 +189,19 @@ void MainWindow::on_search_btn_clicked()
     QListWidgetItem* SearchedEntry;
     foundEntries = servicelist->findItems(toSearchFor, Qt::MatchContains);
     for(int i = 0; i < foundEntries.size(); i++){
-        // TO DO
+        QString mod = toSearchFor.toLower();
+        QString modFound = foundEntries[i]->text().toLower();
+        if(mod == modFound){
+            SearchedEntry = foundEntries[i];
+            found = true;
+        }
+    }
+    if(found){
+        servicelist->setCurrentItem(SearchedEntry);
+        QListWidgetItem* passwordEqiv = passwordlist->item(servicelist->row(SearchedEntry));
+        passwordlist->setCurrentItem(passwordEqiv);
+        servicelist->scrollToItem(SearchedEntry);
+        passwordlist->scrollToItem(passwordEqiv);
+        servicelist->update(); passwordlist->update();
     }
 }
-
